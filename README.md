@@ -12,9 +12,9 @@ A desktop library management application developed using **C# Windows Forms**, *
 - **Stock Tracking:** Manage book stock quantities.
 - **Database Integration:** Store and retrieve data using SQL Server.
 - **Language Support:** Switch between English and Turkish interface labels.
-![Turkish](LmsTurkish.png)
 - **Custom Theme:** A purple-themed interface powered by MaterialSkin.
 
+![Turkish](LmsTurkish.png)
 ![Main Interface](lmsMenu.png)
 
 ## Technologies Used
