@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LibraryDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="lbBooks">
+          <Key>
+            <PropertyRef Name="bookID" />
+          </Key>
+          <Property Name="bookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="bName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="bAuthor" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="bYear" Type="int" />
+          <Property Name="Stock" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lbLoan">
+          <Key>
+            <PropertyRef Name="loanID" />
+          </Key>
+          <Property Name="loanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="memberID" Type="int" Nullable="false" />
+          <Property Name="bookID" Type="int" Nullable="false" />
+          <Property Name="loanDate" Type="date" Nullable="false" />
+          <Property Name="returnDate" Type="date" />
+        </EntityType>
+        <EntityType Name="lbMembers">
+          <Key>
+            <PropertyRef Name="memberID" />
+          </Key>
+          <Property Name="memberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="mName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="mSurname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="mPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="mEmail" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_borrowBooks">
+          <End Role="lbBooks" Type="Self.lbBooks" Multiplicity="1" />
+          <End Role="lbLoan" Type="Self.lbLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lbBooks">
+              <PropertyRef Name="bookID" />
+            </Principal>
+            <Dependent Role="lbLoan">
+              <PropertyRef Name="bookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrowMembers">
+          <End Role="lbMembers" Type="Self.lbMembers" Multiplicity="1" />
+          <End Role="lbLoan" Type="Self.lbLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lbMembers">
+              <PropertyRef Name="memberID" />
+            </Principal>
+            <Dependent Role="lbLoan">
+              <PropertyRef Name="memberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryDBModelStoreContainer">
+          <EntitySet Name="lbBooks" EntityType="Self.lbBooks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lbLoan" EntityType="Self.lbLoan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lbMembers" EntityType="Self.lbMembers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_borrowBooks" Association="Self.FK_borrowBooks">
+            <End Role="lbBooks" EntitySet="lbBooks" />
+            <End Role="lbLoan" EntitySet="lbLoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrowMembers" Association="Self.FK_borrowMembers">
+            <End Role="lbMembers" EntitySet="lbMembers" />
+            <End Role="lbLoan" EntitySet="lbLoan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="lbBooks">
+          <Key>
+            <PropertyRef Name="bookID" />
+          </Key>
+          <Property Name="bookID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="bName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="bAuthor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="bYear" Type="Int32" />
+          <Property Name="Stock" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="lbLoan" Relationship="LibraryDBModel.FK_borrowBooks1" FromRole="lbBooks" ToRole="lbLoan" />
+        </EntityType>
+        <EntityType Name="lbMembers">
+          <Key>
+            <PropertyRef Name="memberID" />
+          </Key>
+          <Property Name="memberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="mName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="mSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="mPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="mEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="lbLoan" Relationship="LibraryDBModel.FK_borrowMembers1" FromRole="lbMembers" ToRole="lbLoan" />
+        </EntityType>
+        <EntityContainer Name="LibraryDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="lbBooks" EntityType="Self.lbBooks" />
+          <EntitySet Name="lbMembers" EntityType="Self.lbMembers" />
+          <EntitySet Name="lbLoan" EntityType="LibraryDBModel.lbLoan" />
+          <AssociationSet Name="FK_borrowBooks1" Association="LibraryDBModel.FK_borrowBooks1">
+            <End Role="lbBooks" EntitySet="lbBooks" />
+            <End Role="lbLoan" EntitySet="lbLoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrowMembers1" Association="LibraryDBModel.FK_borrowMembers1">
+            <End Role="lbMembers" EntitySet="lbMembers" />
+            <End Role="lbLoan" EntitySet="lbLoan" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="lbLoan">
+          <Key>
+            <PropertyRef Name="loanID" />
+          </Key>
+          <Property Name="loanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="memberID" Type="Int32" Nullable="false" />
+          <Property Name="bookID" Type="Int32" Nullable="false" />
+          <Property Name="loanDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="returnDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="lbBooks" Relationship="LibraryDBModel.FK_borrowBooks1" FromRole="lbLoan" ToRole="lbBooks" />
+          <NavigationProperty Name="lbMembers" Relationship="LibraryDBModel.FK_borrowMembers1" FromRole="lbLoan" ToRole="lbMembers" />
+        </EntityType>
+        <Association Name="FK_borrowBooks1">
+          <End Type="LibraryDBModel.lbBooks" Role="lbBooks" Multiplicity="1" />
+          <End Type="LibraryDBModel.lbLoan" Role="lbLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lbBooks">
+              <PropertyRef Name="bookID" />
+            </Principal>
+            <Dependent Role="lbLoan">
+              <PropertyRef Name="bookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrowMembers1">
+          <End Type="LibraryDBModel.lbMembers" Role="lbMembers" Multiplicity="1" />
+          <End Type="LibraryDBModel.lbLoan" Role="lbLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lbMembers">
+              <PropertyRef Name="memberID" />
+            </Principal>
+            <Dependent Role="lbLoan">
+              <PropertyRef Name="memberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryDBModelStoreContainer" CdmEntityContainer="LibraryDBEntities">
+          <EntitySetMapping Name="lbBooks">
+            <EntityTypeMapping TypeName="LibraryDBModel.lbBooks">
+              <MappingFragment StoreEntitySet="lbBooks">
+                <ScalarProperty Name="bookID" ColumnName="bookID" />
+                <ScalarProperty Name="bName" ColumnName="bName" />
+                <ScalarProperty Name="bAuthor" ColumnName="bAuthor" />
+                <ScalarProperty Name="bYear" ColumnName="bYear" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lbMembers">
+            <EntityTypeMapping TypeName="LibraryDBModel.lbMembers">
+              <MappingFragment StoreEntitySet="lbMembers">
+                <ScalarProperty Name="memberID" ColumnName="memberID" />
+                <ScalarProperty Name="mName" ColumnName="mName" />
+                <ScalarProperty Name="mSurname" ColumnName="mSurname" />
+                <ScalarProperty Name="mPhone" ColumnName="mPhone" />
+                <ScalarProperty Name="mEmail" ColumnName="mEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lbLoan">
+            <EntityTypeMapping TypeName="LibraryDBModel.lbLoan">
+              <MappingFragment StoreEntitySet="lbLoan">
+                <ScalarProperty Name="returnDate" ColumnName="returnDate" />
+                <ScalarProperty Name="loanDate" ColumnName="loanDate" />
+                <ScalarProperty Name="bookID" ColumnName="bookID" />
+                <ScalarProperty Name="memberID" ColumnName="memberID" />
+                <ScalarProperty Name="loanID" ColumnName="loanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
